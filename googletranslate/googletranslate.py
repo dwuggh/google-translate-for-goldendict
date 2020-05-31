@@ -23,7 +23,7 @@ from .googletranslatetk import Token
 class GoogleTranslate(object):
     def __init__(self, args):
         self.http_host = args.host
-        self.http_proxy = args.proxy
+        self.proxy = args.proxy
         self.synonyms_en = args.synonyms
         self.definitions_en = args.definitions
         self.examples_en = args.examples
@@ -80,13 +80,13 @@ class GoogleTranslate(object):
 
     def get_resp(self, url):
         proxies = {
-            'http': f'http://{self.http_proxy.strip() if self.http_proxy.strip() else "127.0.0.1:1080"}',
-            'https': f'http://{self.http_proxy.strip() if self.http_proxy.strip() else "127.0.0.1:1080"}'
+            'http': f'{self.proxy.strip() if self.proxy.strip() else "http://127.0.0.1:1080"}',
+            'https': f'{self.proxy.strip() if self.proxy.strip() else "http://127.0.0.1:1080"}'
         }
         base_headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:59.0) Gecko/20100101 Firefox/59.0'}
         session = requests.Session()
         session.headers = base_headers
-        resp = session.get(url, proxies=proxies if self.http_proxy.strip() else None, timeout=5).json()
+        resp = session.get(url, proxies=proxies if self.proxy.strip() else None, timeout=5).json()
         return resp
 
     def result_to_html(self):
